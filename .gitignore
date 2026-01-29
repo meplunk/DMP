@@ -1,3 +1,10 @@
+# Folders and filetypes with too-big data
+Data/
+Models/
+.csv
+.pkl
+.xlsx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
