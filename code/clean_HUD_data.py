@@ -2,15 +2,8 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
+from config import HUD_DATA, HUD_CLEAN
 
-def get_project_paths():
-    """Return dictionary of all project paths"""
-    root = Path(__file__).resolve().parent.parent
-    return {
-        # Raw Data
-        'raw_data': root / "data/raw",
-        'clean_data': root / 'data/clean'
-    }
 
 def load_HUD_data(HUD_path):
     # Read all sheet names
@@ -37,7 +30,7 @@ def load_HUD_data(HUD_path):
 
     return df_combined
 
-def rename_HUD_columns(df, PEL_path):
+def rename_HUD_columns(df):
     """
     Rename key HUD SPM variables to shorter, intuitive names.
     Expects exact column names (or very close) as in the HUD SPM export.
@@ -87,19 +80,15 @@ def rename_HUD_columns(df, PEL_path):
 
     df['state'] = df['coc_code'].str[:2]
 
-    PEL = pd.read_excel(PEL_path, sheet_name='Sheet1')
-
-    df_merged = df.merge(PEL, on=['state'], how='left')
-
-    return df_merged
-
-
+    return df
 
 def main():
-    paths = get_project_paths()
-    df = load_HUD_data(paths["raw_data"] / "HUD.xlsx")
-    df = rename_HUD_columns(df, paths["raw_data"] / "policy_scores_PEL.xlsx")
-    df.to_stata(paths['clean_data'] / "HUD_clean.dta")
+    print("Loading HUD data...")
+    df = load_HUD_data(HUD_DATA)
+    print("Cleaning HUD data...")
+    df = rename_HUD_columns(df)
+    print("Saving cleaned HUD data...")
+    df.to_csv(HUD_CLEAN, index=False)
 
 if __name__ == "__main__":
     main()
