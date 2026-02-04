@@ -2,7 +2,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
-from config import HUD_DATA, HUD_CLEAN
+from config import HUD_DATA, HUD_CLEAN, COVARIATES, ALL_DATA
 
 
 def load_HUD_data(HUD_path):
@@ -30,7 +30,7 @@ def load_HUD_data(HUD_path):
 
     return df_combined
 
-def rename_HUD_columns(df):
+def clean_HUD_data(df):
     """
     Rename key HUD SPM variables to shorter, intuitive names.
     Expects exact column names (or very close) as in the HUD SPM export.
@@ -48,9 +48,9 @@ def rename_HUD_columns(df):
         "ES-SH-TH Median (Days)": "median_days_homeless",
 
         # Rehousing throughput
-        "Percent with Successful  ES, TH, SH, PH-RRH Exit": "rehousing_success",
-        "Total Persons Exiting ES, TH, SH, PH-RRH": "total_exits",
-        "Total Persons Exiting ES, TH, SH, PH-RRH to Permanent Housing": "exits_perm_housing",
+        "Percent with Successful  ES, TH, SH, PH-RRH Exit": "success_rate",
+        "Total Persons Exiting ES, TH, SH, PH-RRH": "exits",
+        "Total Persons Exiting ES, TH, SH, PH-RRH to Permanent Housing": "exits_perm",
 
         # Controls
         "Total Non-DV Beds on 2015 HIC ES+TH": "beds_2015",
@@ -63,10 +63,10 @@ def rename_HUD_columns(df):
 
     # Keep only the renamed (and relevant) columns
     keep_cols = [
-        "coc_name", "coc_code", "year",
-        "avg_days_homeless", "median_days_homeless",
-        "rehousing_success", "total_exits", "exits_perm_housing",
-        "beds_2015", "bed_coverage_pct", "inflow"
+        "coc_name", "coc_code", "year",  "inflow",
+        "avg_days_homeless", "median_days_homeless", 
+        "success_rate", "exits", "exits_perm",
+        "beds_2015", "bed_coverage_pct"
     ]
     df = df[[c for c in keep_cols if c in df.columns]]
 
@@ -75,20 +75,53 @@ def rename_HUD_columns(df):
 
     # Ensure numeric columns are numeric
     num_cols = ["avg_days_homeless", "median_days_homeless",
-                "total_exits", "exits_perm_housing"]
+                "exits", "exits_perm", "inflow"]
     df[num_cols] = df[num_cols].apply(pd.to_numeric, errors="coerce")
 
-    df['state'] = df['coc_code'].str[:2]
+    years_per_coc = df.groupby('coc_code')['year'].count()
+    missings = years_per_coc[years_per_coc < df['year'].nunique()]
 
-    return df
+    if not missings.empty:
+        print("[WARNING] Some CoCs have missing years of data:")
+        print(missings)
+        drop_cocs = missings.index.tolist()
+        df = df[~df['coc_code'].isin(drop_cocs)]
+
+    df_wide = df.pivot(index='coc_code', 
+                    columns='year', 
+                    values=['coc_name', 'inflow', 'avg_days_homeless', 'median_days_homeless', 
+                            'success_rate', 'exits', 'exits_perm'])
+
+    # Flatten the multi-level column names
+    df_wide.columns = [f'{col}_{year}' for col, year in df_wide.columns]
+    df_wide = df_wide.reset_index()
+
+    # Keep only the first coc_name column (they should all be the same)
+    coc_name_cols = [col for col in df_wide.columns if col.startswith('coc_name_')]
+    df_wide['coc_name'] = df_wide[coc_name_cols[0]]
+    df_wide = df_wide.drop(columns=coc_name_cols)
+
+    # Reorder to put coc_name second
+    cols = ['coc_code', 'coc_name'] + [col for col in df_wide.columns if col not in ['coc_code', 'coc_name']]
+    df_wide = df_wide[cols]
+
+    # After reshape
+    print(df_wide.shape)
+
+    df_wide.to_csv(HUD_CLEAN, index=False)
+
+    COVARIATE_DATA = pd.read_csv(COVARIATES)
+    df_wide = pd.merge(df_wide, COVARIATE_DATA, left_on="coc_code", right_on="coc_id", how='left')
+
+    return df_wide
 
 def main():
     print("Loading HUD data...")
     df = load_HUD_data(HUD_DATA)
     print("Cleaning HUD data...")
-    df = rename_HUD_columns(df)
+    df = clean_HUD_data(df)
     print("Saving cleaned HUD data...")
-    df.to_csv(HUD_CLEAN, index=False)
+    df.to_csv(ALL_DATA, index=False)
 
 if __name__ == "__main__":
     main()
