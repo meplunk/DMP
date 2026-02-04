@@ -1,13 +1,17 @@
 import geopandas as gpd
 import fiona
 from pathlib import Path
-from config import COC_SHP, COUNTY_SHP, CROSSWALK
+from config import COC_SHP, COUNTY_SHP, COUNTY_CLEAN
+import os
 
 def loading_and_cleaning():
+    import os
+    print("Exists:", os.path.exists(COC_SHP))
+    print("Is dir:", os.path.isdir(COC_SHP))
     layers = fiona.listlayers(COC_SHP)
     print("Loading data...")
 
-    coc = gpd.read_file(COC_SHP, layer=layers[0]).to_crs(5070)
+    coc = gpd.read_file(COC_SHP, layer=layers[0], driver="OpenFileGDB").to_crs(epsg=5070)
     cty = gpd.read_file(COUNTY_SHP).to_crs(5070)
     print("Cleaning data...")
     keep_cols_coc = ["STATE_NAME", "COCNUM", "COCNAME", "geometry"]
@@ -60,8 +64,8 @@ def overlay(coc, cty):
     print("[INFO] Example rows:\n", out.head())
 
     # Save
-    out.to_csv(CROSSWALK, index=False)
-    print(f"[DONE] Wrote crosswalk to: {CROSSWALK}")
+    out.to_csv(COUNTY_CLEAN, index=False)
+    print(f"[DONE] Wrote crosswalk to: {COUNTY_CLEAN}")
 
 def main():
     coc, cty = loading_and_cleaning()
