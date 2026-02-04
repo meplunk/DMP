@@ -1,7 +1,7 @@
 import geopandas as gpd
 import fiona
 from pathlib import Path
-from config import COC_SHP, COUNTY_SHP, COUNTY_CLEAN
+from config import COC_SHP, COUNTY_SHP, CROSSWALK
 import os
 
 def loading_and_cleaning():
@@ -64,8 +64,8 @@ def overlay(coc, cty):
     print("[INFO] Example rows:\n", out.head())
 
     # Save
-    out.to_csv(COUNTY_CLEAN, index=False)
-    print(f"[DONE] Wrote crosswalk to: {COUNTY_CLEAN}")
+    out.to_csv(CROSSWALK, index=False)
+    print(f"[DONE] Wrote crosswalk to: {CROSSWALK}")
 
 def main():
     coc, cty = loading_and_cleaning()
