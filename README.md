@@ -60,13 +60,6 @@ For convenience, all data files are available in a single Dropbox folder:
 
 **Dropbox Link**: https://www.dropbox.com/scl/fo/hfw7m0peeqsy96gpegyvf/AGIL-TykGfvSOa3WyQ2JP-M?rlkey=dllspdj7lli17w875jnhau26i&st=947n21vd&dl=0
 
-## Notes
-
-- All data sources are publicly available and freely accessible
-- Please refer to individual data source websites for terms of use and citation requirements
-- File formats may vary by source (CSV, XLSX, shapefiles)
-- Data access dates and versions should be documented when replicating this analysis
-
 ## Citation
 
 When using this replication package, please cite the original data sources as appropriate and acknowledge the data providers listed above.
