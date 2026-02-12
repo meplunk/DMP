@@ -23,6 +23,7 @@ COUNTY_POP_2020s = RAW_DIR / "population" / "co-est2024-alldata.csv"
 COUNTY_POP_2010s = RAW_DIR / "population" / "co-est2019-alldata.csv"
 UNEMP = RAW_DIR / "unemployment"
 COVID = RAW_DIR / "covid"
+STATE_POLICY = RAW_DIR / "2022.03.01 Moratoria + Supportive Measures Datasets.xlsx"
 
 # ============================================
 # CLEAN DATA
@@ -31,4 +32,5 @@ HUD_CLEAN = CLEAN_DIR / "HUD_only.csv"
 CROSSWALK = CLEAN_DIR / "coc_county_crosswalk.csv"
 COUNTY_CLEAN = CLEAN_DIR / "county_level_data.csv"
 COVARIATES = CLEAN_DIR / "covariates.csv"
+POLICY_PANEL = CLEAN_DIR / "policy_panel.csv"
 ALL_DATA = CLEAN_DIR / "all_data.csv"
