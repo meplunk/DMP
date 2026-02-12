@@ -36,6 +36,8 @@ data/01_raw/README.md
 
 From the project root directory, run:
 
+conda env create -f environment.yml
+conda activate dmp_env
 python cleaning_code/master_clean.py
 
 This script executes the full cleaning and merging pipeline in the
