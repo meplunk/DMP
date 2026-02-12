@@ -1,6 +1,6 @@
 # Folders and filetypes with too-big data
-Data/
-Models/
+data/
+models/
 .csv
 .pkl
 .xlsx
