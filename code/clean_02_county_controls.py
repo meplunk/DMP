@@ -110,28 +110,76 @@ def add_covid_data(df):
     return df
 
 def collapsing_by_coc(df):
+    import numpy as np
+    import pandas as pd
+
+    # ------------------------------------------------------------
+    # Drop unused geographic columns
+    # ------------------------------------------------------------
     cols_to_drop = ['statefips', 'countyfips', 'STNAME', 'CTYNAME']
     df = df.drop(columns=cols_to_drop)
-    for col in df.columns:
-        if col.startswith('POP') or col.startswith('CASES'):
-            df[col] = df[col].astype('Int64')
-        elif col.startswith('UNEMP'):
-            df[col] = pd.to_numeric(df[col].replace('N.A.', np.nan), errors='coerce')
 
-    # Create dictionaries for aggregation
-    agg_dict = {}
-
-    # Sum columns starting with POP and COVID
+    # ------------------------------------------------------------
+    # Clean types
+    # ------------------------------------------------------------
     for col in df.columns:
         if col.startswith('POP') or col.startswith('COVID'):
-            agg_dict[col] = 'sum'
+            df[col] = pd.to_numeric(df[col], errors='coerce')
         elif col.startswith('UNEMP'):
-            agg_dict[col] = 'mean'
+            df[col] = pd.to_numeric(
+                df[col].replace('N.A.', np.nan),
+                errors='coerce'
+            )
 
-    # Apply groupby with custom aggregations
-    df = df.groupby("coc_id", as_index=False).agg(agg_dict)
+    # ------------------------------------------------------------
+    # Identify years dynamically
+    # ------------------------------------------------------------
+    pop_cols = [c for c in df.columns if c.startswith('POP_')]
+    unemp_cols = [c for c in df.columns if c.startswith('UNEMP_')]
+    covid_cols = [c for c in df.columns if c.startswith('COVID_')]
 
-    return df
+    # Extract year suffixes
+    years = [c.split('_')[1] for c in pop_cols]
+
+    # ------------------------------------------------------------
+    # First aggregate POP and COVID normally (sum)
+    # ------------------------------------------------------------
+    agg_dict = {col: 'sum' for col in pop_cols + covid_cols}
+    df_sum = df.groupby("coc_id", as_index=False).agg(agg_dict)
+
+    # ------------------------------------------------------------
+    # Now compute population-weighted unemployment
+    # ------------------------------------------------------------
+    weighted_unemp = []
+
+    for year in years:
+        pop_col = f'POP_{year}'
+        unemp_col = f'UNEMP_{year}'
+
+        # Compute numerator: sum( (UNEMP/100) * POP )
+        df[f'_unemp_weighted_{year}'] = (
+            (df[unemp_col] / 100) * df[pop_col]
+        )
+
+        num = (
+            df.groupby("coc_id")[f'_unemp_weighted_{year}']
+              .sum()
+              .reset_index(name=f'_num_{year}')
+        )
+
+        # Merge numerator
+        df_sum = df_sum.merge(num, on="coc_id", how="left")
+
+        # Final weighted unemployment rate
+        df_sum[f'UNEMP_{year}'] = (
+            df_sum[f'_num_{year}'] / df_sum[pop_col]
+        ) * 100
+
+        # Drop temporary numerator column
+        df_sum = df_sum.drop(columns=[f'_num_{year}'])
+
+    return df_sum
+
 
 # -----------------------------
 # MAIN
