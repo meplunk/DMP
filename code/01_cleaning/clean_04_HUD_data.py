@@ -137,6 +137,9 @@ def merge_policy(df):
 
     df = df.drop(columns=["state_code", "coc_id"])  # Drop helper columns
 
+    # Erroneous data: NY-511 in 2016 had a negative sucess rate, drop this obs
+    df = df[~((df["coc_code"] == "NY-511") & (df["year"] == 2016))]
+
     return df
 
 
