@@ -159,7 +159,7 @@ def main():
     df = merge_policy(df)
 
     print("Saving final merged dataset...")
-    df.to_csv(ALL_DATA, index=False)
+    df.to_stata(ALL_DATA)
 
     print("Done.")
     print(df.head())
