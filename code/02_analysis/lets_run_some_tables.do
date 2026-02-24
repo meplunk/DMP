@@ -61,9 +61,9 @@ eststo panelC: estpost tabstat `outcomes' ///
 * --------------------
 esttab panelA panelB panelC using ///
 "$output/outcomes_summary.tex", ///
-cells("mean(fmt(3)) sd(fmt(3)) min(fmt(3)) max(fmt(3)) count(fmt(0))") ///
-collabels("Mean" "SD" "Min" "Max" "N") ///
-mtitles("Full Sample" "Control" "Treatment") ///
+cells("mean(fmt(3)) sd(fmt(3)) min(fmt(3)) max(fmt(3))") ///
+collabels("Mean" "SD" "Min" "Max") ///
+mtitles("Full Sample (N = 2823)" "Control (N = 2245)" "Treatment (N = 578)") ///
 label nonumber noobs ///
 replace
 
@@ -101,9 +101,9 @@ eststo panelC: estpost tabstat `covariates' ///
 * --------------------
 esttab panelA panelB panelC using ///
 "$output/covariates_summary.tex", ///
-cells("mean(fmt(3)) sd(fmt(3)) min(fmt(3)) max(fmt(3)) count(fmt(0))") ///
+cells("mean(fmt(3)) sd(fmt(3)) min(fmt(3)) max(fmt(3))") ///
 collabels("Mean" "SD" "Min" "Max" "N") ///
-mtitles("Full Sample" "Control" "Treatment") ///
+mtitles("Full Sample (N = 2823)" "Control (N = 2245)" "Treatment (N = 578)") ///
 label nonumber noobs ///
 replace
 	

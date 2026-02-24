@@ -75,20 +75,63 @@ def add_unemployment_data(df):
 
 def clean_covid_data(path, year):
     df = pd.read_csv(path)
-    df = df.rename(columns={"fips": "GEOID", "cases": f"COVID_cases_{year}", "deaths": f"COVID_deaths_{year}"})
-    df = df[["GEOID", f"COVID_cases_{year}", f"COVID_deaths_{year}"]]
+
+    df = df.rename(columns={
+        "fips": "GEOID",
+        "cases": f"cases_{year}",
+        "deaths": f"deaths_{year}"
+    })
+
+    df = df[["GEOID", f"cases_{year}", f"deaths_{year}"]]
+
     df["GEOID"] = df["GEOID"].fillna(0).astype(int)
-    df["GEOID"] = df["GEOID"].astype(str).str.zfill(5)  
-    df = df.groupby("GEOID", as_index=False).sum()
+    df["GEOID"] = df["GEOID"].astype(str).str.zfill(5)
+
+    # end-of-year cumulative
+    df = df.groupby("GEOID", as_index=False).max()
+
     return df
 
 def add_covid_data(df):
+
     covid_2020 = clean_covid_data(COVID / "us-counties-2020.csv", 2020)
     covid_2021 = clean_covid_data(COVID / "us-counties-2021.csv", 2021)
     covid_2022 = clean_covid_data(COVID / "us-counties-2022.csv", 2022)
     covid_2023 = clean_covid_data(COVID / "us-counties-2023.csv", 2023)
 
-    df["GEOID"] = df["statefips"].astype(str).str.zfill(2) + df["countyfips"].astype(str).str.zfill(3)
+    df["GEOID"] = df["statefips"].astype(str).str.zfill(2) + \
+                  df["countyfips"].astype(str).str.zfill(3)
+
+    df = pd.merge(df, covid_2020, on="GEOID", how='left')
+    df = pd.merge(df, covid_2021, on="GEOID", how='left')
+    df = pd.merge(df, covid_2022, on="GEOID", how='left')
+    df = pd.merge(df, covid_2023, on="GEOID", how='left')
+
+    # ------------------------------------------------------------
+    # Compute annual incidence from cumulative totals
+    # ------------------------------------------------------------
+
+    # 2020 incidence
+    df["COVID_cases_2020"] = df["cases_2020"]
+    df["COVID_deaths_2020"] = df["deaths_2020"]
+
+    # 2021 incidence
+    df["COVID_cases_2021"] = df["cases_2021"] - df["cases_2020"]
+    df["COVID_deaths_2021"] = df["deaths_2021"] - df["deaths_2020"]
+
+    # 2022 incidence
+    df["COVID_cases_2022"] = df["cases_2022"] - df["cases_2021"]
+    df["COVID_deaths_2022"] = df["deaths_2022"] - df["deaths_2021"]
+
+    # 2023 incidence
+    df["COVID_cases_2023"] = df["cases_2023"] - df["cases_2022"]
+    df["COVID_deaths_2023"] = df["deaths_2023"] - df["deaths_2022"]
+
+    # Drop cumulative columns
+    df = df.drop(columns=[
+        "cases_2020","cases_2021","cases_2022","cases_2023",
+        "deaths_2020","deaths_2021","deaths_2022","deaths_2023"
+    ])
 
     df['COVID_cases_2016'] = 0
     df['COVID_deaths_2016'] = 0
@@ -98,12 +141,6 @@ def add_covid_data(df):
     df['COVID_deaths_2018'] = 0
     df['COVID_cases_2019'] = 0
     df['COVID_deaths_2019'] = 0
-    df["statefips"] = df["statefips"].astype(str).str.zfill(2)
-    df["countyfips"] = df["countyfips"].astype(str).str.zfill(3)
-    df = pd.merge(df, covid_2020, on="GEOID", how='left')
-    df = pd.merge(df, covid_2021, on="GEOID", how='left')
-    df = pd.merge(df, covid_2022, on="GEOID", how='left')
-    df = pd.merge(df, covid_2023, on="GEOID", how='left')
 
     df = df.drop(columns=["GEOID"])
 
@@ -168,15 +205,19 @@ def collapsing_by_coc(df):
         ) * 100
 
         df_sum = df_sum.drop(columns=[f'_num_{year}'])
+    
+    print("Columns after aggregation:")
+    print(df_sum.columns)
 
     # ------------------------------------------------------------
     # NOW RESHAPE TO LONG
     # ------------------------------------------------------------
+    value_cols = (
+        [c for c in df_sum.columns if c.startswith("POP_")] +
+        [c for c in df_sum.columns if c.startswith("COVID_")] +
+        [c for c in df_sum.columns if c.startswith("UNEMP_")]
+    )
 
-    # Identify all wide columns that contain a year
-    value_cols = [c for c in df_sum.columns if "_" in c and c != "coc_id"]
-
-    # Melt into long
     df_long = df_sum.melt(
         id_vars="coc_id",
         value_vars=value_cols,
@@ -184,17 +225,18 @@ def collapsing_by_coc(df):
         value_name="value"
     )
 
-    # Split variable into base name and year
     df_long[["var", "year"]] = df_long["variable"].str.rsplit("_", n=1, expand=True)
-
     df_long["year"] = df_long["year"].astype(int)
 
-    # Pivot so each row is coc_id × year
     df_long = (
         df_long
-        .pivot(index=["coc_id", "year"], columns="var", values="value")
+        .pivot(index=["coc_id","year"], columns="var", values="value")
         .reset_index()
     )
+
+    # Now this WILL work
+    covid_cols = [c for c in df_long.columns if c.startswith("COVID")]
+    df_long.loc[df_long["year"] < 2020, covid_cols] = 0
 
     return df_long
 

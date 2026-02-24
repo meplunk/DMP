@@ -140,6 +140,9 @@ def merge_policy(df):
     # Erroneous data: NY-511 in 2016 had a negative sucess rate, drop this obs
     df = df[~((df["coc_code"] == "NY-511") & (df["year"] == 2016))]
 
+    # Dropping obs with POP == 0 (only 7 obs, 5 of which are islands which are outliers in other ways)
+    df = df[df["POP"] > 0]
+    
     return df
 
 
