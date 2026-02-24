@@ -5,6 +5,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx} 
 \usepackage{comment}
+\usepackage{booktabs}
 
 \title{Tables}
 \author{Mary Edith Plunkett}
@@ -15,9 +16,13 @@
 \tableofcontents
 \addcontentsline{toc}{section}{Summary Statistics:}
 
+\newpage
+\subsection*{Outcomes Summary Statistics}
 \addcontentsline{toc}{subsection}{Outcomes}
 \input{tex/outcomes_summary}
 
+\newpage
+\subsection*{Covariates Summary Statistics}
 \addcontentsline{toc}{subsection}{Covariates}
 \input{tex/covariates_summary}
 

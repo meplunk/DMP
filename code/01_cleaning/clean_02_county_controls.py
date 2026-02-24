@@ -74,74 +74,63 @@ def add_unemployment_data(df):
     return df
 
 def clean_covid_data(path, year):
-    df = pd.read_csv(path)
+    """
+    Read NYT us-counties-YYYY.csv and return annual totals by county FIPS (GEOID).
 
+    Assumption (NYT yearly files): 'cases' and 'deaths' are cumulative within the year.
+    Therefore, max(cases) in that file = total cases during that year.
+    """
+    df = pd.read_csv(path, dtype={"fips": "Int64"})
+
+    # Keep only what we need
+    df = df.rename(columns={"fips": "GEOID"})
+    df = df[["GEOID", "cases", "deaths"]].copy()
+
+    # Drop rows without a county FIPS (NYT has some NaNs for "Unknown" etc.)
+    df = df.dropna(subset=["GEOID"])
+
+    # Standardize GEOID as 5-char string
+    df["GEOID"] = df["GEOID"].astype(int).astype(str).str.zfill(5)
+
+    # End-of-year totals (within-year cumulative)
+    df = df.groupby("GEOID", as_index=False)[["cases", "deaths"]].max()
+
+    # Rename to annual totals columns
     df = df.rename(columns={
-        "fips": "GEOID",
-        "cases": f"cases_{year}",
-        "deaths": f"deaths_{year}"
+        "cases": f"COVID_cases_{year}",
+        "deaths": f"COVID_deaths_{year}"
     })
-
-    df = df[["GEOID", f"cases_{year}", f"deaths_{year}"]]
-
-    df["GEOID"] = df["GEOID"].fillna(0).astype(int)
-    df["GEOID"] = df["GEOID"].astype(str).str.zfill(5)
-
-    # end-of-year cumulative
-    df = df.groupby("GEOID", as_index=False).max()
 
     return df
 
-def add_covid_data(df):
 
-    covid_2020 = clean_covid_data(COVID / "us-counties-2020.csv", 2020)
-    covid_2021 = clean_covid_data(COVID / "us-counties-2021.csv", 2021)
-    covid_2022 = clean_covid_data(COVID / "us-counties-2022.csv", 2022)
-    covid_2023 = clean_covid_data(COVID / "us-counties-2023.csv", 2023)
+def add_covid_data(df, covid_dir):
+    """
+    Add annual county-level COVID cases/deaths to df using GEOID merge.
+    Produces COVID_cases_YYYY and COVID_deaths_YYYY for YYYY=2020..2023 plus zeros for 2016..2019.
+    """
+    # Build county GEOID in your main df
+    df = df.copy()
+    df["GEOID"] = (
+        df["statefips"].astype(str).str.zfill(2)
+        + df["countyfips"].astype(str).str.zfill(3)
+    )
 
-    df["GEOID"] = df["statefips"].astype(str).str.zfill(2) + \
-                  df["countyfips"].astype(str).str.zfill(3)
+    # Merge annual totals (2020-2023)
+    for year in [2020, 2021, 2022, 2023]:
+        covid_year = clean_covid_data(covid_dir / f"us-counties-{year}.csv", year)
+        df = df.merge(covid_year, on="GEOID", how="left")
 
-    df = pd.merge(df, covid_2020, on="GEOID", how='left')
-    df = pd.merge(df, covid_2021, on="GEOID", how='left')
-    df = pd.merge(df, covid_2022, on="GEOID", how='left')
-    df = pd.merge(df, covid_2023, on="GEOID", how='left')
+        # Counties missing from NYT file -> treat as 0
+        df[f"COVID_cases_{year}"] = df[f"COVID_cases_{year}"].fillna(0)
+        df[f"COVID_deaths_{year}"] = df[f"COVID_deaths_{year}"].fillna(0)
 
-    # ------------------------------------------------------------
-    # Compute annual incidence from cumulative totals
-    # ------------------------------------------------------------
+    # Add pre-COVID years explicitly as zeros
+    for year in [2016, 2017, 2018, 2019]:
+        df[f"COVID_cases_{year}"] = 0
+        df[f"COVID_deaths_{year}"] = 0
 
-    # 2020 incidence
-    df["COVID_cases_2020"] = df["cases_2020"]
-    df["COVID_deaths_2020"] = df["deaths_2020"]
-
-    # 2021 incidence
-    df["COVID_cases_2021"] = df["cases_2021"] - df["cases_2020"]
-    df["COVID_deaths_2021"] = df["deaths_2021"] - df["deaths_2020"]
-
-    # 2022 incidence
-    df["COVID_cases_2022"] = df["cases_2022"] - df["cases_2021"]
-    df["COVID_deaths_2022"] = df["deaths_2022"] - df["deaths_2021"]
-
-    # 2023 incidence
-    df["COVID_cases_2023"] = df["cases_2023"] - df["cases_2022"]
-    df["COVID_deaths_2023"] = df["deaths_2023"] - df["deaths_2022"]
-
-    # Drop cumulative columns
-    df = df.drop(columns=[
-        "cases_2020","cases_2021","cases_2022","cases_2023",
-        "deaths_2020","deaths_2021","deaths_2022","deaths_2023"
-    ])
-
-    df['COVID_cases_2016'] = 0
-    df['COVID_deaths_2016'] = 0
-    df['COVID_cases_2017'] = 0
-    df['COVID_deaths_2017'] = 0
-    df['COVID_cases_2018'] = 0
-    df['COVID_deaths_2018'] = 0
-    df['COVID_cases_2019'] = 0
-    df['COVID_deaths_2019'] = 0
-
+    # Optionally drop GEOID if you don't need it downstream
     df = df.drop(columns=["GEOID"])
 
     return df
