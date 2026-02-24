@@ -1,3 +1,3 @@
 \contentsline {section}{Summary Statistics:}{1}{section*.1}%
 \contentsline {subsection}{Outcomes}{2}{section*.2}%
-\contentsline {subsection}{Covariates}{3}{section*.3}%
+\contentsline {subsection}{Covariates}{3}{section*.6}%

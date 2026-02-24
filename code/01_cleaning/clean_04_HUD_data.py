@@ -142,6 +142,23 @@ def merge_policy(df):
 
     # Dropping obs with POP == 0 (only 7 obs, 5 of which are islands which are outliers in other ways)
     df = df[df["POP"] > 0]
+
+    # ------------------------------------------------------------
+    # Create ever-treated indicator at CoC level
+    # ------------------------------------------------------------
+
+    ever_treated = (
+        df.groupby("coc_code")["overall_days"]
+        .max()
+        .reset_index()
+        .rename(columns={"overall_days": "ever_treated"})
+    )
+
+    # ever_treated = 1 if moratorium ever occurs in that CoC
+    ever_treated["ever_treated"] = (ever_treated["ever_treated"] > 0).astype(int)
+
+    # Merge back to full panel
+    df = df.merge(ever_treated, on="coc_code", how="left")
     
     return df
 
