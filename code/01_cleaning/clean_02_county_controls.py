@@ -7,7 +7,7 @@ import time
 from tqdm import tqdm
 import numpy as np
 
-def add_population_data():
+def add_population_data(): 
     pop20 = pd.read_csv(COUNTY_POP_2020s, encoding="latin-1")
     pop10 = pd.read_csv(COUNTY_POP_2010s, encoding="latin-1")
 
@@ -224,8 +224,8 @@ def collapsing_by_coc(df):
     )
 
     # Now this WILL work
-    covid_cols = [c for c in df_long.columns if c.startswith("COVID")]
-    df_long.loc[df_long["year"] < 2020, covid_cols] = 0
+    covid_vars = [c for c in df_long.columns if c.startswith("COVID")]
+    df_long.loc[df_long["year"] < 2020, covid_vars] = 0
 
     return df_long
 
@@ -237,7 +237,7 @@ def collapsing_by_coc(df):
 def main():
     df = add_population_data()
     df = add_unemployment_data(df)
-    df = add_covid_data(df)
+    df = add_covid_data(df, COVID)
     df.to_csv(COUNTY_CLEAN, index=False)
     print(df.head())
     df_coc = collapsing_by_coc(df)
