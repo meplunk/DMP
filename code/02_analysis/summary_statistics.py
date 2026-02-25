@@ -41,27 +41,17 @@ count_variables = {
     "COVID Deaths"
 }
 
-def make_summary_table(df: pd.DataFrame, varlist: list[str], filename: str, split: bool = True):
-
-    needed = ["overall_days"] + varlist if split else varlist
-    missing = [c for c in needed if c not in df.columns]
-    if missing:
-        raise KeyError(f"Missing columns needed for summary table: {missing}")
+def make_summary_table(df: pd.DataFrame, varlist: list[str], filename: str):
 
     df_use = df.copy()
 
-    if split:
-        groups = {
-            f"Full Sample (N = {len(df_use)})": df_use,
-            f"Control (N = {len(df_use[df_use['ever_treated'] == 0])})":
-                df_use[df_use['ever_treated'] == 0],
-            f"Treatment (N = {len(df_use[df_use['ever_treated'] == 1])})":
-                df_use[df_use["ever_treated"] == 1],
-        }
-    else:
-        groups = {
-            f"Full Sample (N = {len(df_use)})": df_use
-        }
+    groups = {
+        f"Full Sample (N = {len(df_use)})": df_use,
+        f"Control (N = {len(df_use[df_use['ever_treated'] == 0])})":
+            df_use[df_use['ever_treated'] == 0],
+        f"Treatment (N = {len(df_use[df_use['ever_treated'] == 1])})":
+            df_use[df_use["ever_treated"] == 1],
+    }
 
     panels = []
 
@@ -127,30 +117,14 @@ def main():
     print("Making 6 tables...")
 
     # Outcomes
-    make_summary_table(df_full, outcomes,
-                       "outcomes_summary_full_2016_2023.tex",
-                       split=True)
-
-    make_summary_table(df_pre, outcomes,
-                       "outcomes_summary_pre_2016_2019.tex",
-                       split=True)  
-
-    make_summary_table(df_covid, outcomes,
-                       "outcomes_summary_covid_2020_2023.tex",
-                       split=True)
+    make_summary_table(df_full, outcomes, "outcomes_summary_full_2016_2023.tex")
+    make_summary_table(df_pre, outcomes, "outcomes_summary_pre_2016_2019.tex")
+    make_summary_table(df_covid, outcomes, "outcomes_summary_covid_2020_2023.tex")
 
     # Covariates
-    make_summary_table(df_full, covariates,
-                       "covariates_summary_full_2016_2023.tex",
-                       split=True)
-
-    make_summary_table(df_pre, covariates,
-                       "covariates_summary_pre_2016_2019.tex",
-                       split=True) 
-    
-    make_summary_table(df_covid, covariates,
-                       "covariates_summary_covid_2020_2023.tex",
-                       split=True)
+    make_summary_table(df_full, covariates, "covariates_summary_full_2016_2023.tex")
+    make_summary_table(df_pre, covariates, "covariates_summary_pre_2016_2019.tex") 
+    make_summary_table(df_covid, covariates, "covariates_summary_covid_2020_2023.tex")
 
 
 if __name__ == "__main__":
