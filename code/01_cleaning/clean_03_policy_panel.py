@@ -11,7 +11,7 @@ from typing import Dict, Tuple, Iterable
 import pandas as pd
 import numpy as np
 
-from config import STATE_POLICY, POLICY_PANEL
+from config import STATE_POLICY, POLICY_PANEL, SCORECARD
 
 # ---------------------------------------------------------------------
 # SETTINGS
@@ -25,7 +25,7 @@ SHEET_NAME = "Moratoria Dataset"
 STATE_CODE_MAP = {
     "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR",
     "California": "CA", "Colorado": "CO", "Connecticut": "CT",
-    "Delaware": "DE", "District of Columbia": "DC",
+    "Delaware": "DE", "Washington, DC": "DC",
     "Florida": "FL", "Georgia": "GA", "Hawaii": "HI",
     "Idaho": "ID", "Illinois": "IL", "Indiana": "IN",
     "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY",
@@ -43,8 +43,65 @@ STATE_CODE_MAP = {
     "Wisconsin": "WI", "Wyoming": "WY",
     "Puerto Rico": "PR",
     "Virgin Islands": "VI",
-    "U.S. Virgin Islands": "VI"
+    "U.S. Virgin Islands": "VI",
+    "Washington, D.C.": "DC",
 }
+
+state_fips_dict = {
+    "Alabama": "01",
+    "Alaska": "02",
+    "Arizona": "04",
+    "Arkansas": "05",
+    "California": "06",
+    "Colorado": "08",
+    "Connecticut": "09",
+    "Delaware": "10",
+    "Washington, DC": "11",
+    "Florida": "12",
+    "Georgia": "13",
+    "Hawaii": "15",
+    "Idaho": "16",
+    "Illinois": "17",
+    "Indiana": "18",
+    "Iowa": "19",
+    "Kansas": "20", 
+    "Kentucky": "21",
+    "Louisiana": "22",
+    "Maine": "23",
+    "Maryland": "24",
+    "Massachusetts": "25",
+    "Michigan": "26",
+    "Minnesota": "27",
+    "Mississippi": "28",
+    "Missouri": "29",
+    "Montana": "30",
+    "Nebraska": "31",
+    "Nevada": "32",
+    "New Hampshire": "33",
+    "New Jersey": "34",
+    "New Mexico": "35",
+    "New York": "36",
+    "North Carolina": "37",
+    "North Dakota": "38",
+    "Ohio": "39",
+    "Oklahoma": "40",
+    "Oregon": "41",
+    "Pennsylvania": "42",
+    "Rhode Island": "44",
+    "South Carolina": "45",
+    "South Dakota": "46",
+    "Tennessee": "47",
+    "Texas": "48",
+    "Utah": "49",
+    "Vermont": "50",
+    "Virginia": "51",
+    "Washington": "53",
+    "West Virginia": "54",
+    "Wisconsin": "55",
+    "Wyoming": "56",
+}
+
+
 
 STATE_POLICY_COLUMNS: Dict[str, Tuple[str, str]] = {
     "overall_active": ("Overall First Date of Effect", "Overall Date of Expiration"),
@@ -141,6 +198,7 @@ def clean_state_policy() -> pd.DataFrame:
     # Clean state names
     df["state_clean"] = df["State"].apply(clean_state_name)
     df["state_code"] = df["state_clean"].map(STATE_CODE_MAP)
+    df["state_fips"] = df["state_clean"].map(state_fips_dict)
 
     # Keep only mapped states/territories
     df = df[df["state_code"].notna()].copy()
@@ -150,18 +208,22 @@ def clean_state_policy() -> pd.DataFrame:
     for col in date_cols:
         df[col] = df[col].apply(parse_mixed_us_date)
 
-    # Build daily skeleton
+    # ------------------------------------------------------------
+    # Build daily skeleton (NOW KEEP state_fips)
+    # ------------------------------------------------------------
     all_days = pd.date_range(START, END, freq="D")
 
     state_daily = (
-        df[["state_code"]]
+        df[["state_code", "state_fips"]]
         .drop_duplicates()
         .assign(key=1)
         .merge(pd.DataFrame({"date": all_days, "key": 1}), on="key")
         .drop(columns="key")
     )
 
+    # ------------------------------------------------------------
     # Flag policies
+    # ------------------------------------------------------------
     for out_col, (start_col, end_col) in STATE_POLICY_COLUMNS.items():
         state_daily[out_col] = 0
         flag_policy_window(
@@ -176,32 +238,39 @@ def clean_state_policy() -> pd.DataFrame:
     for col in STATE_POLICY_COLUMNS.keys():
         state_daily[col] = state_daily[col].clip(0, 1).astype(int)
 
-    # Aggregate annually
+    # ------------------------------------------------------------
+    # Aggregate annually (NOW GROUP BY state_fips too)
+    # ------------------------------------------------------------
     state_daily["year"] = state_daily["date"].dt.year
 
     agg_spec = {
         f"{k.replace('_active','')}_days": (k, "sum")
         for k in STATE_POLICY_COLUMNS.keys()
     }
-
     agg_spec["total_days"] = ("date", "count")
 
     annual = (
         state_daily
-        .groupby(["state_code", "year"], as_index=False)
+        .groupby(["state_code", "state_fips", "year"], as_index=False)
         .agg(**agg_spec)
         .sort_values(["state_code", "year"])
     )
 
-    annual.to_csv(POLICY_PANEL, index=False)
-
     return annual
+
+def merge_scorecard(policy_panel):
+    sc = pd.read_excel(SCORECARD)
+    sc["state_code"] = sc["state"].map(STATE_CODE_MAP)
+    df = pd.merge(policy_panel, sc, on="state_code", how="left")
+    return df
 
 
 def main() -> None:
     out = clean_state_policy()
-    print(f"✓ Wrote policy panel to {POLICY_PANEL}")
     print(f"States/Territories: {out['state_code'].nunique()} | Years: {out['year'].nunique()}")
+    df = merge_scorecard(out)
+    df.to_csv(POLICY_PANEL, index=False)
+    print(f"✓ Wrote policy panel to {POLICY_PANEL}")
 
 
 if __name__ == "__main__":

@@ -26,6 +26,7 @@ STATE_POP_10 = RAW_DIR / "population" / "nst-est2020int-pop.xlsx"
 UNEMP = RAW_DIR / "unemployment"
 COVID = RAW_DIR / "covid"
 STATE_POLICY = RAW_DIR / "2022.03.01 Moratoria + Supportive Measures Datasets.xlsx"
+SCORECARD = RAW_DIR / "HousingPolicyScorecard.xlsx"
 
 # ============================================
 # CLEAN DATA
