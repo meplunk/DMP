@@ -33,6 +33,7 @@ STATE_POLICY = RAW_DIR / "2022.03.01 Moratoria + Supportive Measures Datasets.xl
 HUD_CLEAN = CLEAN_DIR / "HUD_only.csv"
 CROSSWALK = CLEAN_DIR / "coc_county_crosswalk.csv"
 COUNTY_CLEAN = CLEAN_DIR / "county_level_data.csv"
+STATE_CLEAN = CLEAN_DIR / "state_level_data.csv"
 COVARIATES = CLEAN_DIR / "covariates.csv"
 POLICY_PANEL = CLEAN_DIR / "policy_panel.csv"
 ALL_DATA = CLEAN_DIR / "all_data.dta"

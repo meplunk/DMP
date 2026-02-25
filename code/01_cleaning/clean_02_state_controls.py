@@ -2,7 +2,7 @@ import os
 import requests
 import pandas as pd
 from pathlib import Path
-from config import COUNTY_CLEAN, UNEMP, UNEMP, STATE_POP_10, STATE_POP_20, COVID, CROSSWALK, COVARIATES
+from config import STATE_CLEAN, UNEMP, UNEMP, STATE_POP_10, STATE_POP_20, COVID
 import time
 from tqdm import tqdm
 import numpy as np
@@ -135,31 +135,97 @@ def unemployment_data(df):
         df = df.drop(columns=[f'UNEMP_{year}', f'LF_{year}'])
 
         return df
-    
-    unemp_2016 = clean_unemployment_data(UNEMP / "laucnty16.xlsx", "laucnty16", 2016)
-    unemp_2017 = clean_unemployment_data(UNEMP / "laucnty17.xlsx", "laucnty17", 2017)
-    unemp_2018 = clean_unemployment_data(UNEMP / "laucnty18.xlsx", "laucnty18", 2018)
-    unemp_2019 = clean_unemployment_data(UNEMP / "laucnty19.xlsx", "laucnty19", 2019)
-    unemp_2020 = clean_unemployment_data(UNEMP / "laucnty20.xlsx", "laucnty20", 2020)
-    unemp_2021 = clean_unemployment_data(UNEMP / "laucnty21.xlsx", "laucnty21", 2021)
-    unemp_2022 = clean_unemployment_data(UNEMP / "laucnty22.xlsx", "laucnty22", 2022)
-    unemp_2023 = clean_unemployment_data(UNEMP / "laucnty23.xlsx", "laucnty23", 2023)
-    df = pd.merge(df, unemp_2016, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2017, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2018, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2019, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2020, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2021, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2022, on=['state_fips'], how='left')
-    df = pd.merge(df, unemp_2023, on=['state_fips'], how='left')
+        
+    years = range(2016, 2024)
+
+    for year in years:
+        file_suffix = str(year)[-2:]  # 2016 → "16"
+        
+        unemp = clean_unemployment_data(
+            UNEMP / f"laucnty{file_suffix}.xlsx",
+            f"laucnty{file_suffix}",
+            year
+        )
+        
+        df = df.merge(unemp, on="state_fips", how="left")
     return df
 
+def clean_covid_data(path, year):
+    """
+    Read NYT us-counties-YYYY.csv and return annual totals by county FIPS (GEOID).
+
+    Assumption (NYT yearly files): 'cases' and 'deaths' are cumulative within the year.
+    Therefore, max(cases) in that file = total cases during that year.
+    """
+    df = pd.read_csv(path, dtype={"fips": "Int64"})
+
+    # Keep only what we need
+    df = df.rename(columns={"fips": "GEOID"})
+    df = df[["GEOID", "cases", "deaths"]].copy()
+
+    # Drop rows without a county FIPS (NYT has some NaNs for "Unknown" etc.)
+    df = df.dropna(subset=["GEOID"])
+
+    # Standardize GEOID as 5-char string
+    df["GEOID"] = df["GEOID"].astype(int).astype(str).str.zfill(5)
+
+    # End-of-year totals (within-year cumulative)
+    df = df.groupby("GEOID", as_index=False)[["cases", "deaths"]].max()
+
+    # Rename to annual totals columns
+    df = df.rename(columns={
+        "cases": f"COVID_cases_{year}",
+        "deaths": f"COVID_deaths_{year}"
+    })
+
+    # drop the last three digits of GEOID and rename the column 'state'
+    df['state_fips'] = df['GEOID'].str[:-3]
+    df = df.drop(columns=["GEOID"])
+
+    # group by state_fips, sum
+    df = df.groupby("state_fips").sum().reset_index()
+
+    # make the COVID_deaths_{year} column float --> int
+    df[f'COVID_deaths_{year}'] = df[f'COVID_deaths_{year}'].astype(int)
+
+    return df
+
+
+def add_covid_data(df):
+    """
+    Add annual county-level COVID cases/deaths to df using GEOID merge.
+    Produces COVID_cases_YYYY and COVID_deaths_YYYY for YYYY=2020..2023 plus zeros for 2016..2019.
+    """
+    # Merge annual totals (2020-2023)
+    for year in [2020, 2021, 2022, 2023]:
+        covid_year = clean_covid_data(COVID / f"us-counties-{year}.csv", year)
+        df = df.merge(covid_year, on="state_fips", how="left")
+
+    # Add pre-COVID years explicitly as zeros
+    for year in [2016, 2017, 2018, 2019]:
+        df[f"COVID_cases_{year}"] = 0
+        df[f"COVID_deaths_{year}"] = 0
+
+    return df
 
 def main():
     df = population_data()
     df = unemployment_data(df)
-    print(df.head())
+    df = add_covid_data(df)
+    # reshape df wide to long, create a year column from the suffixes
+    df_long = pd.wide_to_long(
+        df,
+        stubnames=["POP", "U3", "COVID_cases", "COVID_deaths"],
+        i="state_fips",
+        j="year",
+        sep="_",
+        suffix="\\d+"
+    ).reset_index()
 
+    df_long["year"] = df_long["year"].astype(int)
+    print(df_long.head())
+    df_long.to_csv(STATE_CLEAN, index=False)
+    print(f'saved to {STATE_CLEAN}')
 
 
 if __name__ == "__main__":
