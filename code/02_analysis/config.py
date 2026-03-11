@@ -34,8 +34,10 @@ COUNTY_CLEAN = CLEAN_DIR / "county_level_data.csv"
 COVARIATES = CLEAN_DIR / "covariates.csv"
 POLICY_PANEL = CLEAN_DIR / "policy_panel.csv"
 ALL_DATA = CLEAN_DIR / "all_data.dta"
+ALL_STATE_DATA = CLEAN_DIR / "all_state_data.dta"
 
 # ============================================
 # OUTPUT
 # ============================================
 TABLES = PROJECT_ROOT / "output" / "tables" / "tex"
+GRAPHS = PROJECT_ROOT / "output" / "graphs"

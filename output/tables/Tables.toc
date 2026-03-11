@@ -1,20 +1,38 @@
-\contentsline {section}{Summary Statistics:}{1}{section*.1}%
+\contentsline {section}{Summary Statistics by CoC:}{1}{section*.1}%
 \contentsline {subsection}{Outcomes}{2}{section*.2}%
 \contentsline {subsection}{Covariates}{3}{section*.6}%
-\contentsline {section}{Preliminary Regressions - Separated by Policy Outcome}{4}{section*.10}%
-\contentsline {subsection}{Overall Moratorium Days}{4}{section*.11}%
-\contentsline {subsection}{Stage 1 Days}{4}{section*.12}%
-\contentsline {subsection}{Stage 1 COVID Days}{5}{section*.13}%
-\contentsline {subsection}{Stage 1 Non-Payment Days}{5}{section*.14}%
-\contentsline {subsection}{Stage 2 Days}{5}{section*.15}%
-\contentsline {subsection}{Stage 2 COVID Days}{6}{section*.16}%
-\contentsline {subsection}{Stage 2 Non-Payment Days}{6}{section*.17}%
-\contentsline {subsection}{Stage 3 Days}{6}{section*.18}%
-\contentsline {subsection}{Stage 3 COVID Days}{7}{section*.19}%
-\contentsline {subsection}{Stage 3 Non-Payment Days}{7}{section*.20}%
-\contentsline {subsection}{Stage 4 Days}{7}{section*.21}%
-\contentsline {subsection}{Stage 5 Days}{8}{section*.22}%
-\contentsline {subsection}{CARES Act Days}{8}{section*.23}%
-\contentsline {subsection}{CDC Moratorium Days}{8}{section*.24}%
-\contentsline {subsection}{Total Moratorium Days}{9}{section*.25}%
-\contentsline {subsection}{Moratorium Index}{9}{section*.26}%
+\contentsline {section}{Summary Statistics by State:}{4}{section*.9}%
+\contentsline {subsection}{Outcomes}{4}{section*.10}%
+\contentsline {subsection}{Covariates}{5}{section*.14}%
+\contentsline {section}{Preliminary Regressions - by CoC}{6}{section*.18}%
+\contentsline {subsection}{Overall Moratorium Days}{6}{section*.19}%
+\contentsline {subsection}{Stage 1 Days}{6}{section*.20}%
+\contentsline {subsection}{Stage 1 COVID Days}{7}{section*.21}%
+\contentsline {subsection}{Stage 1 Non-Payment Days}{7}{section*.22}%
+\contentsline {subsection}{Stage 2 Days}{7}{section*.23}%
+\contentsline {subsection}{Stage 2 COVID Days}{8}{section*.24}%
+\contentsline {subsection}{Stage 2 Non-Payment Days}{8}{section*.25}%
+\contentsline {subsection}{Stage 3 Days}{8}{section*.26}%
+\contentsline {subsection}{Stage 3 COVID Days}{9}{section*.27}%
+\contentsline {subsection}{Stage 3 Non-Payment Days}{9}{section*.28}%
+\contentsline {subsection}{Stage 4 Days}{9}{section*.29}%
+\contentsline {subsection}{Stage 5 Days}{10}{section*.30}%
+\contentsline {subsection}{CARES Act Days}{10}{section*.31}%
+\contentsline {subsection}{CDC Moratorium Days}{10}{section*.32}%
+\contentsline {section}{Preliminary Regressions - by State}{11}{section*.33}%
+\contentsline {subsection}{Overall Moratorium Days}{11}{section*.34}%
+\contentsline {subsection}{Moratorium Intensity}{11}{section*.35}%
+\contentsline {subsection}{Housing Policy Scorecard}{11}{section*.36}%
+\contentsline {subsection}{Stage 1 Days}{12}{section*.37}%
+\contentsline {subsection}{Stage 1 COVID Days}{12}{section*.38}%
+\contentsline {subsection}{Stage 1 Non-Payment Days}{12}{section*.39}%
+\contentsline {subsection}{Stage 2 Days}{13}{section*.40}%
+\contentsline {subsection}{Stage 2 COVID Days}{13}{section*.41}%
+\contentsline {subsection}{Stage 2 Non-Payment Days}{13}{section*.42}%
+\contentsline {subsection}{Stage 3 Days}{14}{section*.43}%
+\contentsline {subsection}{Stage 3 COVID Days}{14}{section*.44}%
+\contentsline {subsection}{Stage 3 Non-Payment Days}{14}{section*.45}%
+\contentsline {subsection}{Stage 4 Days}{15}{section*.46}%
+\contentsline {subsection}{Stage 5 Days}{15}{section*.47}%
+\contentsline {subsection}{CARES Act Days}{15}{section*.48}%
+\contentsline {subsection}{CDC Moratorium Days}{16}{section*.49}%
