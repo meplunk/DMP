@@ -17,27 +17,8 @@ def star_format(p):
 def prepare_data(df):
     df = df.copy()
 
-    df["total_days"] = 365
-    df.loc[df["year"] % 4 == 0, "total_days"] = 366
-
     # centered linear time variable
     df["t"] = df["year"] - df["year"].min()
-
-    # share variables
-    for var in TO_SHARE:
-        df[f"share_{var}"] = df[var] / df["total_days"]
-
-    # outcome variables
-    df["inflow_rate"] = df["inflow"] / df["POP"] * 100000
-    df["exit_rate"] = df["exits"] / df["POP"] * 100000
-    df["perm_exit_rate"] = df["exits_perm"] / df["POP"] * 100000
-
-    # intensity variables
-    df["moratorium_intensity"] = df["overall_days"] * df["SCORECARD"]
-    df["share_moratorium_intensity"] = df["share_overall_days"] * df["SCORECARD"]
-
-    df["weighted_scorecard"] = df["SCORECARD"]
-    df.loc[df["overall_days"] == 0, "weighted_scorecard"] = 0
 
     return df
 

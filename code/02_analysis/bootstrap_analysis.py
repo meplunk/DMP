@@ -15,29 +15,7 @@ def star_format(p):
         return ""
 
 
-def prepare_data(df):
-    df = df.copy()
-
-    df["total_days"] = 365
-    df.loc[df["year"] % 4 == 0, "total_days"] = 366
-    df["t"] = df["year"] - df["year"].min()
-
-    for var in TO_SHARE:
-        df[f"share_{var}"] = df[var] / df["total_days"]
-
-    df["inflow_rate"] = df["inflow"] / df["POP"] * 100000
-    df["exit_rate"] = df["exits"] / df["POP"] * 100000
-    df["perm_exit_rate"] = df["exits_perm"] / df["POP"] * 100000
-    df["moratorium_intensity"] = df["overall_days"] * df["SCORECARD"]
-    df["share_moratorium_intensity"] = df["share_overall_days"] * df["SCORECARD"]
-    df["weighted_scorecard"] = df["SCORECARD"]
-    df.loc[df["overall_days"] == 0, "weighted_scorecard"] = 0
-
-    return df
-
-
 def run_models(df, use_state_trends=False, bootstrap_reps=9999, bootstrap_type="31"):
-    df = prepare_data(df)
 
     for policy in POLICY_VARS:
         results = {}

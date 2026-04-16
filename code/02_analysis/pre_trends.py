@@ -19,12 +19,6 @@ def star_format(p):
 def pre_trend_graphs():
     df = pd.read_stata(ALL_STATE_DATA)
 
-    df["inflow_rate"] = df["inflow"] / df["POP"] * 100000
-    df["exit_rate"] = df["exits"] / df["POP"] * 100000
-
-    # Construct variable "ever_treated" = 1 if overall_days > 0 at any point during the panel
-    df["ever_treated"] = (df["overall_days"] > 0).groupby(df["state_code"]).transform("max")
-
     # Create summary dataframe for plotting if ever_treated == 1
     df_summary_treated = df[df["ever_treated"] == 1].groupby("year").agg({
         'inflow_rate': 'mean',
@@ -110,7 +104,7 @@ def pre_trends_table():
 
     outcomes = {
         "inflow": "Inflow",
-        "exit": "Exits",
+        "exits": "Exits",
         "median_days_homeless": "Median Days Homeless",
     }
 
