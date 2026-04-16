@@ -12,23 +12,26 @@ def plot_homelessness_flows():
     df['exit_rate'] = df['exits'] / df['POP'] * 100000
 
     # Filter for the relevant columns
-    df = df[['year', 'state_code', 'inflow_rate', 'exit_rate', 'avg_days_homeless', 'median_days_homeless']]
+    df = df[['year', 'state_code', 'inflow', 'exits', 'exits_perm', 'avg_days_homeless', 'median_days_homeless']]
 
     # Collapse by year (state averages)
     df_summary = df.groupby('year').agg({
-        'inflow_rate': 'mean',
-        'exit_rate': 'mean',
+        'inflow': 'sum',
+        'exits': 'sum',
+        'exits_perm': 'sum',
         'avg_days_homeless': 'mean',
         'median_days_homeless': 'mean'
     }).reset_index()
 
+    df_summary.to_csv(GRAPHS / "homelessness_flows_summary.csv", index=False)
+
     # Plot line graphs for inflow and exits with labels
     plt.figure(figsize=(6, 6))
-    sns.lineplot(data=df_summary, x='year', y='inflow_rate', marker='o', label='Inflow')
-    sns.lineplot(data=df_summary, x='year', y='exit_rate', marker='o', label='Exits')
-    plt.title('Average Inflow and Exits from Homelessness Over Time')
+    sns.lineplot(data=df_summary, x='year', y='inflow', marker='o', label='Inflow')
+    sns.lineplot(data=df_summary, x='year', y='exits', marker='o', label='Exits')
+    plt.title('National Homelessnes Flows 2016-2023')
     plt.xlabel('Year')
-    plt.ylabel('Number of People per Thousand Population')
+    plt.ylabel('Number of People')
     plt.legend()
     plt.tight_layout()
     plt.savefig(GRAPHS / "homelessness_flows.png", dpi=300)
@@ -60,10 +63,12 @@ covariates = [
     "COVID_cases",
 ]
 
+all_vars = ["inflow_rate", "avg_days_homeless", "exit_rate", "POP", "RENT_POP", "U3"]
+
 var_labels = {
-    "inflow_rate": "First Time Homeless per Thousand Population",
+    "inflow_rate": "Inflow",
     "avg_days_homeless": "Average Days Homeless",
-    "exit_rate": "Exits from Homelessness per Thousand Population",
+    "exit_rate": "Exits",
     "POP": "Population",
     'RENT_POP': "Renting Population",
     "U3": "Unemployment Rate",
@@ -99,13 +104,13 @@ def make_summary_table(df: pd.DataFrame, varlist: list[str], filename: str):
     panels = []
 
     for title, data in groups.items():
-        summary = data[varlist].agg(["mean", "std", "min", "max"]).T
+        summary = data[varlist].agg(["mean", "std"]).T
 
         summary["mean"] = summary["mean"].round(3)
         summary["std"]  = summary["std"].round(3)
 
         summary.index = summary.index.map(var_labels)
-        summary.columns = pd.MultiIndex.from_product([[title], ["Mean", "SD", "Min", "Max"]])
+        summary.columns = pd.MultiIndex.from_product([[title], ["Mean", "SD"]])
 
         panels.append(summary)
 
@@ -115,23 +120,26 @@ def make_summary_table(df: pd.DataFrame, varlist: list[str], filename: str):
     # Custom formatting
     # ------------------------------------------------------------
     final_table = final_table.astype(object)
+
     for col in final_table.columns:
         stat = col[1]
 
-        if stat in ["Mean", "SD"]:
-            final_table[col] = final_table[col].map(lambda x: f"{float(x):.3f}")
+        for idx in final_table.index:
+            val = final_table.at[idx, col]
 
-        elif stat in ["Min", "Max"]:
-            for idx in final_table.index:
-                val = final_table.at[idx, col]
-                if pd.isna(val):
-                    final_table.at[idx, col] = ""
-                    continue
+            if pd.isna(val):
+                final_table.at[idx, col] = ""
+                continue
 
-                if idx in count_variables:
-                    final_table.at[idx, col] = f"{int(round(float(val)))}"
-                else:
-                    final_table.at[idx, col] = f"{float(val):.3f}"
+            val = float(val)
+
+            # Variables that should be integers (Mean, SD, Min, Max)
+            if idx in count_variables:
+                final_table.at[idx, col] = f"{int(round(val))}"
+
+            # Other variables
+            elif stat in ["Mean", "SD", "Min", "Max"]:
+                final_table.at[idx, col] = f"{val:.3f}"
 
     latex = final_table.to_latex(
         multicolumn=True,
@@ -147,7 +155,7 @@ def make_summary_table(df: pd.DataFrame, varlist: list[str], filename: str):
     print(f"✓ Saved {outpath}")
 
 
-def main():
+def prep_tables():
     print("Loading data...")
     df = pd.read_stata(ALL_STATE_DATA)
 
@@ -158,6 +166,16 @@ def main():
     df_pre    = df[(df["year"] >= 2016) & (df["year"] <= 2019)].copy()
     df_covid  = df[(df["year"] >= 2020) & (df["year"] <= 2023)].copy()
 
+    return df_full, df_pre, df_covid
+
+
+def main():
+
+    plot_homelessness_flows()
+    #df_full, df_pre, df_covid = prep_tables()
+    #make_summary_table(df_pre, all_vars, "st_summary_pre_2016_2019.tex")
+
+    '''
     print("Making 6 tables...")
 
     # Outcomes
@@ -169,6 +187,7 @@ def main():
     make_summary_table(df_full, covariates, "st_covariates_summary_full_2016_2023.tex")
     make_summary_table(df_pre, covariates, "st_covariates_summary_pre_2016_2019.tex") 
     make_summary_table(df_covid, covariates, "st_covariates_summary_covid_2020_2023.tex")
+    '''
 
 if __name__ == "__main__":
     main()

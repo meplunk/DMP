@@ -165,14 +165,18 @@ def merge_policy(df):
     'total_days', 'RENT_POP', 'SCORECARD'
     ]   
 
-    # fill RENT_POP and SCORECARD, should be the same in all years for a given state
-    df[["RENT_POP", "SCORECARD"]] = (
-    df.sort_values(["state_code", "year"])
-      .groupby("state_code")[["RENT_POP", "SCORECARD"]]
-      .ffill()
-      .bfill()
-    )
+    # Fill state-level constant columns within state only
+    state_constant_cols = ["RENT_POP", "SCORECARD", "overall_end_year"]
 
+    df = df.sort_values(["state_code", "year"]).copy()
+
+    for col in state_constant_cols:
+        df[col] = (
+            df.groupby("state_code")[col]
+            .transform(lambda s: s.ffill().bfill())
+        )
+
+    # Fill policy-flow columns with 0 outside 2020–2022
     df[policy_cols] = df[policy_cols].fillna(0)
 
     # drop total days, state_x, state_y, move state_code to front

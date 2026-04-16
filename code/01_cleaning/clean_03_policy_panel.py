@@ -208,6 +208,14 @@ def clean_state_policy() -> pd.DataFrame:
     for col in date_cols:
         df[col] = df[col].apply(parse_mixed_us_date)
 
+    # Final overall moratorium expiration date/year by state
+    end_date_df = (
+        df[["state_code", "Overall Date of Expiration"]]
+        .dropna()
+        .groupby("state_code", as_index=False)
+        .agg(overall_end_year=("Overall Date of Expiration", lambda x: x.max().year))
+    )
+
     # ------------------------------------------------------------
     # Build daily skeleton (NOW KEEP state_fips)
     # ------------------------------------------------------------
@@ -256,12 +264,34 @@ def clean_state_policy() -> pd.DataFrame:
         .sort_values(["state_code", "year"])
     )
 
+    # States that ever had an overall moratorium
+    treated_states = annual.groupby("state_code")["overall_days"].max().reset_index()
+    treated_states = treated_states[treated_states["overall_days"] > 0][["state_code"]]
+
+    # Final overall moratorium expiration year, but only for treated states
+    end_year_df = (
+        df[["state_code", "Overall Date of Expiration"]]
+        .dropna()
+        .merge(treated_states, on="state_code", how="inner")
+        .groupby("state_code", as_index=False)
+        .agg(overall_end_year=("Overall Date of Expiration", lambda x: x.max().year))
+    )
+
+    annual = pd.merge(
+        annual,
+        end_year_df,
+        on="state_code",
+        how="left",
+        validate="many_to_one"
+    )
+
     return annual
 
 def merge_scorecard(policy_panel):
     sc = pd.read_excel(SCORECARD)
     sc["state_code"] = sc["state"].map(STATE_CODE_MAP)
     df = pd.merge(policy_panel, sc, on="state_code", how="left")
+    print(df[["state_code", "overall_end_year"]].drop_duplicates().sort_values("overall_end_year"))
     return df
 
 

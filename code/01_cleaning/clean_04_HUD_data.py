@@ -182,6 +182,7 @@ def main():
     df = merge_policy(df)
 
     print("Saving final merged dataset...")
+    df = df.drop(columns=["state"])
     df.to_stata(ALL_DATA)
 
     print("Done.")

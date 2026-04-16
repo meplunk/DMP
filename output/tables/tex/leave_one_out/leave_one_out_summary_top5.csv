@@ -1,0 +1,81 @@
+policy,policy_label,outcome,outcome_label,state_dropped,coef,full_sample_coef,coef_change,abs_coef_change,sign_flip
+moratorium_intensity,Moratorium Intensity,exit_rate,Exits,MN,-0.05065023495541167,-0.04243334408177863,-0.008216890873633038,0.008216890873633038,False
+moratorium_intensity,Moratorium Intensity,exit_rate,Exits,AK,-0.03582624929976406,-0.04243334408177863,0.006607094782014572,0.006607094782014572,False
+moratorium_intensity,Moratorium Intensity,exit_rate,Exits,NY,-0.03885812164294129,-0.04243334408177863,0.0035752224388373374,0.0035752224388373374,False
+moratorium_intensity,Moratorium Intensity,exit_rate,Exits,CO,-0.03978901028573434,-0.04243334408177863,0.0026443337960442917,0.0026443337960442917,False
+moratorium_intensity,Moratorium Intensity,exit_rate,Exits,VT,-0.04018497949125532,-0.04243334408177863,0.0022483645905233135,0.0022483645905233135,False
+moratorium_intensity,Moratorium Intensity,inflow_rate,Inflow,DC,-0.04659542936496084,-0.057254523200733314,0.010659093835772473,0.010659093835772473,False
+moratorium_intensity,Moratorium Intensity,inflow_rate,Inflow,NY,-0.04827005986390039,-0.057254523200733314,0.00898446333683292,0.00898446333683292,False
+moratorium_intensity,Moratorium Intensity,inflow_rate,Inflow,MN,-0.0659722880207153,-0.057254523200733314,-0.008717764819981981,0.008717764819981981,False
+moratorium_intensity,Moratorium Intensity,inflow_rate,Inflow,MA,-0.05311358670083872,-0.057254523200733314,0.004140936499894596,0.004140936499894596,False
+moratorium_intensity,Moratorium Intensity,inflow_rate,Inflow,CT,-0.06113022932823819,-0.057254523200733314,-0.0038757061275048743,0.0038757061275048743,False
+moratorium_intensity,Moratorium Intensity,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},AR,-0.006350229886636441,-0.010087457095632349,0.0037372272089959075,0.0037372272089959075,False
+moratorium_intensity,Moratorium Intensity,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MA,-0.012130016333424174,-0.010087457095632349,-0.0020425592377918255,0.0020425592377918255,False
+moratorium_intensity,Moratorium Intensity,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MN,-0.012018555614764202,-0.010087457095632349,-0.001931098519131853,0.001931098519131853,False
+moratorium_intensity,Moratorium Intensity,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},PR,-0.008769502826971264,-0.010087457095632349,0.0013179542686610844,0.0013179542686610844,False
+moratorium_intensity,Moratorium Intensity,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},CO,-0.011191835881896478,-0.010087457095632349,-0.0011043787862641298,0.0011043787862641298,False
+moratorium_intensity,Moratorium Intensity,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},DC,-0.006447489667757354,-0.019447638808040825,0.013000149140283471,0.013000149140283471,False
+moratorium_intensity,Moratorium Intensity,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MN,-0.023754633053343226,-0.019447638808040825,-0.004306994245302401,0.004306994245302401,False
+moratorium_intensity,Moratorium Intensity,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MA,-0.023303820873704872,-0.019447638808040825,-0.0038561820656640468,0.0038561820656640468,False
+moratorium_intensity,Moratorium Intensity,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},IL,-0.020846640166270653,-0.019447638808040825,-0.0013990013582298282,0.0013990013582298282,False
+moratorium_intensity,Moratorium Intensity,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},CT,-0.020631432841366565,-0.019447638808040825,-0.00118379403332574,0.00118379403332574,False
+overall_days,Overall Moratorium Days,exit_rate,Exits,NM,-0.13543231530691185,-0.1094077302144092,-0.02602458509250266,0.02602458509250266,False
+overall_days,Overall Moratorium Days,exit_rate,Exits,AK,-0.088726850528487,-0.1094077302144092,0.020680879685922193,0.020680879685922193,False
+overall_days,Overall Moratorium Days,exit_rate,Exits,MN,-0.12336448280161934,-0.1094077302144092,-0.013956752587210144,0.013956752587210144,False
+overall_days,Overall Moratorium Days,exit_rate,Exits,NY,-0.09609791490424359,-0.1094077302144092,0.013309815310165604,0.013309815310165604,False
+overall_days,Overall Moratorium Days,exit_rate,Exits,DC,-0.09625943342452767,-0.1094077302144092,0.013148296789881525,0.013148296789881525,False
+overall_days,Overall Moratorium Days,inflow_rate,Inflow,NY,-0.1053607821008411,-0.13654840010534738,0.031187618004506285,0.031187618004506285,False
+overall_days,Overall Moratorium Days,inflow_rate,Inflow,DC,-0.10917691165338565,-0.13654840010534738,0.02737148845196173,0.02737148845196173,False
+overall_days,Overall Moratorium Days,inflow_rate,Inflow,NM,-0.15807165844584084,-0.13654840010534738,-0.021523258340493456,0.021523258340493456,False
+overall_days,Overall Moratorium Days,inflow_rate,Inflow,MA,-0.12144275852831567,-0.13654840010534738,0.015105641577031717,0.015105641577031717,False
+overall_days,Overall Moratorium Days,inflow_rate,Inflow,MN,-0.14870953436617226,-0.13654840010534738,-0.01216113426082488,0.01216113426082488,False
+overall_days,Overall Moratorium Days,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},AR,-0.027449978897945503,-0.04638381551949902,0.01893383662155352,0.01893383662155352,False
+overall_days,Overall Moratorium Days,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},KS,-0.03226736035939898,-0.04638381551949902,0.014116455160100044,0.014116455160100044,False
+overall_days,Overall Moratorium Days,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MN,-0.051769503713335364,-0.04638381551949902,-0.005385688193836342,0.005385688193836342,False
+overall_days,Overall Moratorium Days,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MA,-0.05151083258534582,-0.04638381551949902,-0.005127017065846798,0.005127017065846798,False
+overall_days,Overall Moratorium Days,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},NM,-0.051294265995790976,-0.04638381551949902,-0.004910450476291954,0.004910450476291954,False
+overall_days,Overall Moratorium Days,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},DC,-0.016895701059183525,-0.0456851564440407,0.028789455384857172,0.028789455384857172,False
+overall_days,Overall Moratorium Days,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MN,-0.0529249926230512,-0.0456851564440407,-0.0072398361790105,0.0072398361790105,False
+overall_days,Overall Moratorium Days,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},NM,-0.05218800272600341,-0.0456851564440407,-0.00650284628196271,0.00650284628196271,False
+overall_days,Overall Moratorium Days,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MA,-0.050454918228581246,-0.0456851564440407,-0.004769761784540548,0.004769761784540548,False
+overall_days,Overall Moratorium Days,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},NH,-0.049912128193704636,-0.0456851564440407,-0.004226971749663938,0.004226971749663938,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,exit_rate,Exits,MN,-18.52482917223422,-15.517896675913319,-3.0069324963209016,3.0069324963209016,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,exit_rate,Exits,AK,-13.104932428440982,-15.517896675913319,2.4129642474723365,2.4129642474723365,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,exit_rate,Exits,NY,-14.211364636202019,-15.517896675913319,1.3065320397112998,1.3065320397112998,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,exit_rate,Exits,CO,-14.552364431675612,-15.517896675913319,0.965532244237707,0.965532244237707,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,exit_rate,Exits,VT,-14.695899310399758,-15.517896675913319,0.8219973655135604,0.8219973655135604,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,inflow_rate,Inflow,DC,-17.035138834684414,-20.925869825989395,3.890730991304981,3.890730991304981,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,inflow_rate,Inflow,NY,-17.64279684905669,-20.925869825989395,3.2830729769327043,3.2830729769327043,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,inflow_rate,Inflow,MN,-24.115348607841142,-20.925869825989395,-3.189478781851747,3.189478781851747,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,inflow_rate,Inflow,MA,-19.4147015714614,-20.925869825989395,1.5111682545279947,1.5111682545279947,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,inflow_rate,Inflow,CT,-22.33864196504304,-20.925869825989395,-1.4127721390536436,1.4127721390536436,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},AR,-2.318533382345044,-3.6797999004498334,1.3612665181047894,1.3612665181047894,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MA,-4.426771512370109,-3.6797999004498334,-0.7469716119202752,0.7469716119202752,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MN,-4.38515976544597,-3.6797999004498334,-0.705359864996137,0.705359864996137,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},PR,-3.19881396095672,-3.6797999004498334,0.4809859394931135,0.4809859394931135,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},CO,-4.083111494548394,-3.6797999004498334,-0.40331159409856054,0.40331159409856054,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},DC,-2.361949405689997,-7.116284434786197,4.7543350290962,4.7543350290962,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MN,-8.69285494226258,-7.116284434786197,-1.576570507476383,1.576570507476383,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MA,-8.52763965062393,-7.116284434786197,-1.4113552158377338,1.4113552158377338,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},IL,-7.627829333915217,-7.116284434786197,-0.5115448991290199,0.5115448991290199,False
+share_moratorium_intensity,Moratorium Intensity by Share of Year,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},CT,-7.548271360256203,-7.116284434786197,-0.4319869254700066,0.4319869254700066,False
+weighted_scorecard,Weighted Scorecard,exit_rate,Exits,NY,-8.235035686664908,-9.865850911004125,1.6308152243392176,1.6308152243392176,False
+weighted_scorecard,Weighted Scorecard,exit_rate,Exits,MN,-11.088936742277053,-9.865850911004125,-1.2230858312729271,1.2230858312729271,False
+weighted_scorecard,Weighted Scorecard,exit_rate,Exits,AK,-8.73416665611874,-9.865850911004125,1.1316842548853856,1.1316842548853856,False
+weighted_scorecard,Weighted Scorecard,exit_rate,Exits,VT,-9.039249227500209,-9.865850911004125,0.8266016835039167,0.8266016835039167,False
+weighted_scorecard,Weighted Scorecard,exit_rate,Exits,DC,-10.448387824608613,-9.865850911004125,-0.5825369136044873,0.5825369136044873,False
+weighted_scorecard,Weighted Scorecard,inflow_rate,Inflow,MA,-4.600127141937132,-6.418785680222094,1.8186585382849625,1.8186585382849625,False
+weighted_scorecard,Weighted Scorecard,inflow_rate,Inflow,NY,-5.012359109414907,-6.418785680222094,1.406426570807187,1.406426570807187,False
+weighted_scorecard,Weighted Scorecard,inflow_rate,Inflow,NV,-7.749727278724676,-6.418785680222094,-1.3309415985025819,1.3309415985025819,False
+weighted_scorecard,Weighted Scorecard,inflow_rate,Inflow,CO,-7.307750198841763,-6.418785680222094,-0.8889645186196686,0.8889645186196686,False
+weighted_scorecard,Weighted Scorecard,inflow_rate,Inflow,OR,-5.5363907565750825,-6.418785680222094,0.8823949236470119,0.8823949236470119,False
+weighted_scorecard,Weighted Scorecard,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},AR,-1.558721561324422,-2.9266184477450863,1.3678968864206642,1.3678968864206642,False
+weighted_scorecard,Weighted Scorecard,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MA,-3.3142574914449345,-2.9266184477450863,-0.38763904369984825,0.38763904369984825,False
+weighted_scorecard,Weighted Scorecard,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},MN,-3.3026281857859514,-2.9266184477450863,-0.3760097380408651,0.3760097380408651,False
+weighted_scorecard,Weighted Scorecard,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},OK,-3.24373380868641,-2.9266184477450863,-0.31711536094132375,0.31711536094132375,False
+weighted_scorecard,Weighted Scorecard,median_days_homeless,\shortstack{\\[0.1ex] Median \\ Days Homeless},ND,-3.219989033255857,-2.9266184477450863,-0.2933705855107709,0.2933705855107709,False
+weighted_scorecard,Weighted Scorecard,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},NY,-2.914158952723157,-3.4971889617074132,0.5830300089842564,0.5830300089842564,False
+weighted_scorecard,Weighted Scorecard,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MN,-4.028117669641259,-3.4971889617074132,-0.5309287079338456,0.5309287079338456,False
+weighted_scorecard,Weighted Scorecard,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},VT,-3.0683635802766953,-3.4971889617074132,0.4288253814307179,0.4288253814307179,False
+weighted_scorecard,Weighted Scorecard,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},DC,-3.181909216549954,-3.4971889617074132,0.31527974515745916,0.31527974515745916,False
+weighted_scorecard,Weighted Scorecard,perm_exit_rate,\shortstack{\\[0.1ex] Exits to \\ Permanent Housing},MA,-3.805229952452451,-3.4971889617074132,-0.30804099074503766,0.30804099074503766,False

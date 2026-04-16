@@ -1,0 +1,142 @@
+% titlepage.tex - Simple thesis-style title page
+
+% Use basic LaTeX variable storage
+\def\thesistitletext{}
+\def\thesisauthortext{}
+\def\advisortext{}
+\def\depttext{Economics}
+\def\deptprefixtext{Department of}
+\def\thesisdatetext{\today}
+\def\acknowledgementstext{}
+
+% Simple commands to set variables
+\newcommand{\thesistitle}[1]{\def\thesistitletext{#1}}
+\newcommand{\thesisauthor}[1]{\def\thesisauthortext{#1}}
+\newcommand{\advisor}[1]{\def\advisortext{#1}}
+\newcommand{\department}[1]{\def\depttext{#1}}
+\newcommand{\departmentprefix}[1]{\def\deptprefixtext{#1}}
+\newcommand{\thesisdate}[1]{\def\thesisdatetext{#1}}
+\newcommand{\thesisacknowledgements}[1]{\def\acknowledgementstext{#1}}
+
+% Thesis title page (page 1) - no abstract
+\newcommand{\makethesistitle}{%
+  \thispagestyle{empty}
+  
+  % Temporarily adjust margins
+  \newgeometry{margin=1in, top=0.75in, bottom=1in}
+  
+  % Single spacing
+  \begin{spacing}{1.0}
+  
+  \begin{center}
+    \vspace*{0.5in}
+    
+    % Title
+    {\huge\bfseries \thesistitletext}
+    
+    \vspace{0.8in}
+    
+    % Author
+    {\Large \thesisauthortext}
+    
+    \vspace{0.3in}
+    
+    % Advisor
+    {\large Advisor: \advisortext}
+    
+    \vspace{0.8in}
+    
+    % Institution
+    {\large
+      Submitted to the \\[0.2in]
+      Distinguished Majors Program \\[0.1in]
+      \deptprefixtext{} \depttext \\[0.1in]
+      University of Virginia
+    }
+    
+    \vspace{1.0in}
+    
+    % Date
+    {\large \thesisdatetext}
+    
+  \end{center}
+  
+  \end{spacing}
+  
+  % Restore geometry
+  \restoregeometry
+  
+  \clearpage
+}
+
+% Academic paper format page (page 2) - with abstract
+\newcommand{\makeacademicpage}{%
+  \newpage
+  \thispagestyle{empty}
+  
+  % Use paper.sty's built-in title formatting but with footnote without marker
+  \begin{center}
+    {\huge\bfseries \thesistitletext%
+    \renewcommand{\thefootnote}{}%  % This removes the footnote marker
+    \footnote{\acknowledgementstext}%
+    \renewcommand{\thefootnote}{\arabic{footnote}}%
+    \setcounter{footnote}{0}}
+    \par\vspace{2em}
+    {\Large \thesisauthortext}
+    \par\vspace{1em}
+    {\large\scshape\color{zinc700} \thesisdatetext}
+  \end{center}
+  
+  \vspace{2em}
+  
+  % Add Abstract heading
+  \begin{center}
+  \end{center}
+  \vspace{2em}
+  
+  % This is where the abstract content will be added
+ 
+    % Reset page counter so next page starts at 1
+  \setcounter{page}{1}
+}
+
+% Statement/declaration page
+\newcommand{\makestatements}{%
+  \newpage
+  \thispagestyle{empty}
+  \begin{spacing}{1.0}
+  
+  \vspace*{0.5in}
+  
+  \noindent I hereby declare that I am the sole author of this thesis.
+  
+  \vspace{0.4in}
+  
+  \noindent I authorize University of Virginia to lend this thesis to other 
+  institutions or individuals for the purpose of scholarly research.
+  
+  \vspace{0.8in}
+  
+  \hfill
+  \begin{minipage}{3in}
+    \hrulefill \\
+    \thesisauthortext
+  \end{minipage}
+   
+  \vspace{1.0in}
+  
+  \noindent I further authorize University of Virginia to reproduce this thesis by photocopying or by
+  other means, in total or in part, at the request of other institutions or individuals for the
+  purpose of scholarly research.
+  
+  \vspace{0.8in}
+  
+  \hfill
+  \begin{minipage}{3in}
+    \hrulefill \\
+    \thesisauthortext
+  \end{minipage}
+  
+  \end{spacing}
+  \clearpage
+}

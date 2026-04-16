@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage{paper,math}
+\input{titlepage} 
+
+% Set thesis information
+\thesistitle{My Amazing Thesis Title}
+\thesisauthor{Name Lastname}
+\advisor{Dr. Jane Professor}
+\department{Economics}
+\departmentprefix{Department of}
+\thesisdate{\today}
+\thesisacknowledgements{%
+  Email: \href{mailto:name@lastname.com}{name@lastname.com} \textcolor{red}{(use an email that will be accessible after graduation)..} I would like to thank my advisor and family...
+}
+
+\hypersetup{
+  pdftitle = {My Amazing Thesis Title},
+  pdfauthor = {John Smith},
+}
+
+% Conditionally display thoughts
+\booltrue{INCLUDECOMMENTS}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Page 1: Thesis title page (no abstract)
+\makethesistitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Page 2: Academic format with title, author, and abstract  
+\makeacademicpage
+\noindent Insert abstract here.
+
+\par\vspace{4em}\noindent
+{\color{zinc700}Keywords:} 
+\par\noindent
+{\color{zinc700}JEL-Classification:} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+
+% Paper ------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+\section{Introduction}
+% ------------------------------------------------------------------------------
+
+
+
+
+
+% ------------------------------------------------------------------------------
+\section{...}
+% ------------------------------------------------------------------------------
+
+
+% ------------------------------------------------------------------------------
+\subsection{...}
+% ------------------------------------------------------------------------------
+
+
+
+% ------------------------------------------------------------------------------
+\clearpage
+\bibliography{references} 
+% ------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------
+\newpage~\appendix
+% ------------------------------------------------------------------------------
+
+
+% ------------------------------------------------------------------------------
+\section{Derivations}
+% ------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------
+\section{Robustness checks}
+% ------------------------------------------------------------------------------
+
+\end{document}
