@@ -19,9 +19,51 @@ Data Analysis
 │   ├── survey_code
 │   │   ├── baseline
 │   │   ├── midline
+│   │   │   ├── Main Survey
+│   │   │   │   ├── 1_Field_Work
+│   │   │   │   │   ├── 1_Data_Flow
+│   │   │   │   │   │   ├── 0_Master
+│   │   │   │   │   │   ├── 1_Decrypt
+│   │   │   │   │   │   ├── 2_Import
+│   │   │   │   │   │   └── 3_Append
+│   │   │   │   │   ├── 2_Cleaning
+│   │   │   │   │   │   ├── 0_Master
+│   │   │   │   │   │   └── 1_Clean
+│   │   │   │   │   └── 3_HFC
+│   │   │   │   │   │   ├── 0_Master
+│   │   │   │   │   │   └── 1_Spread
+│   │   │   │   ├── 2_Backchecks
+│   │   │   │   │   ├── 1_Generate_Backcheck_Entries
+│   │   │   │   │   ├── 2_Import_Backchecks
+│   │   │   │   │   └── 3_Reconcile_Backchecks
+│   │   │   │   ├── 3_Analysis
+│   │   │   │   └── HFC logs
+│   │   │   ├── Infrastructure
+│   │   │   ├── Strength
+│   │   │   └── Tracking Survey
 │   │   ├── endline
+│   │   │   ├── 1_Field_Work
+│   │   │   │   ├── 1_Data_Flow
+│   │   │   │   │   ├── 0_Master
+│   │   │   │   │   ├── 1_Decrypt
+│   │   │   │   │   ├── 2_Import
+│   │   │   │   │   └── 3_Append
+│   │   │   │   ├── 2_Cleaning
+│   │   │   │   │   ├── 0_Master
+│   │   │   │   │   └── 1_Clean
+│   │   │   │   └── 3_HFC
+│   │   │   │   │   ├── 0_Master
+│   │   │   │   │   └── 1_Spread
+│   │   │   ├── 2_Backchecks
+│   │   │   │   ├── 1_Generate_Backcheck_Entries
+│   │   │   │   ├── 2_Import_Backchecks
+│   │   │   │   └── 3_Reconcile_Backchecks
+│   │   │   ├── 3_Analysis
+│   │   │   └── HFC_logs
 │   │   ├── pooled
 │   │   ├── ims_short
+│   │   │   ├── ims calls
+│   │   │   └── ims in_person
 │   │   ├── survey_nbd_districts
 │   │   ├── programs
 │   │   └── task assignment
