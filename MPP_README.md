@@ -1,3 +1,4 @@
+## Folder Structure
 ```
 Data Analysis
 ├── Code
@@ -10,7 +11,7 @@ Data Analysis
 │   │   └── analysis
 │   ├── randomization code
 │   │   └── randomization
-│   ├── SCTO
+│   ├── SCTO 
 │   │   └── endline
 │   │       ├── Infrastructure
 │   │       ├── Main Survey 
